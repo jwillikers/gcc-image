@@ -58,11 +58,8 @@ jobs:
       - name: Load the image
         run: podman image load -i gcc-${{ matrix.arch }}.tar
 
-      - name: Run the image and verify the OpenSSH server is available
-        run: |
-          podman run --name test-container -d -p 2222:22 localhost/gcc
-          sleep 5
-          nc -z localhost 22
+      - name: Run the image and verify GCC is available inside the container
+        run: podman run --rm --name test-container -d localhost/gcc g++ --version
   
   publish:
     name: Publish
