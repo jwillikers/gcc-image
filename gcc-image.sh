@@ -42,7 +42,7 @@ while getopts ":a:h" option; do
 done
 
 CONTAINER=$(buildah from --arch "$ARCHITECTURE" registry.fedoraproject.org/fedora-minimal:latest)
-IMAGE="openssh-server"
+IMAGE="gcc"
 
 buildah run "$CONTAINER" /bin/sh -c 'microdnf install -y clang-tools-extra cmake gdb gcc gcc-c++ openocd ninja-build python3 python3-pip python3-wheel python-unversioned-command --nodocs --setopt install_weak_deps=0'
 
