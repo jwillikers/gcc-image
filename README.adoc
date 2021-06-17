@@ -25,11 +25,18 @@ Comes complete with CMake, Conan, Ninja, and Clang tools.
 
 Supported architectures:: `amd64`, `arm32v7`, `arm64v8`
 
-. To use the GCC toolchain inside the container, execute commands via {Podman}.
-+
+To use the GCC toolchain inside the container, execute commands via {Podman}.
+
 [source,sh]
 ----
-➜ podman run --rm -dt --volume "$HOME":/root:Z --name gcc quay.io/jwillikers/gcc cmake -GNinja ..
+➜ podman run --rm -dt --volume "$PWD":/home/user:Z --name gcc quay.io/jwillikers/gcc cmake -GNinja ..
+----
+
+Or just open a shell inside the container.
+
+[source,sh]
+----
+➜ podman run --rm -it --volume "$HOME":/home/user:Z --name gcc quay.io/jwillikers/gcc
 ----
 
 == Build
