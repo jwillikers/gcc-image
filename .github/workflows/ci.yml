@@ -66,9 +66,9 @@ jobs:
 
       - name: Run the image and verify GCC is available inside the container
         run: |
-          podman unshare chown $(id -u "$USER"):(id -g "$USER") ${{ env.GITHUB_WORKSPACE }}
-          podman run --rm --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc g++ test/main.cpp
-          podman run --rm --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc ./a.out
+          # podman unshare chown $(id -u "$USER"):(id -g "$USER") ${{ env.GITHUB_WORKSPACE }}
+          podman run --userns keep-id --privileged --rm --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc g++ test/main.cpp
+          podman run --userns keep-id --privileged --rm --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc ./a.out
   
   publish:
     name: Publish
