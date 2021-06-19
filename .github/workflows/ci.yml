@@ -65,7 +65,10 @@ jobs:
         run: sudo podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Run the image and verify GCC is available inside the container
-        run: ./test-ci.sh
+        run: |
+          # podman unshare chown $(id -u "$USER"):(id -g "$USER") ${{ env.GITHUB_WORKSPACE }}
+          podman run --rm --userns keep-id --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc g++ test/main.cpp
+          podman run --rm --userns keep-id --volume ${{ env.GITHUB_WORKSPACE }}:/home/user --name test-container -t localhost/gcc ./a.out
   
   publish:
     name: Publish
