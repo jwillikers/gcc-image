@@ -28,7 +28,7 @@ To use the GCC toolchain inside the container, execute commands via {Podman}.
 
 [source,sh]
 ----
-➜ podman run --rm -dt --volume "$PWD":/home/user:Z --name gcc quay.io/jwillikers/gcc g++ test/main.cpp
+➜ podman run --rm -dt --volume "$PWD":/home/user:Z --name gcc quay.io/jwillikers/gcc:latest g++ test/main.cpp
 ----
 
 Or just open a shell inside the container.
