@@ -62,10 +62,10 @@ jobs:
           name: gcc-${{ matrix.arch }}
 
       - name: Load the image
-        run: podman image load -i gcc-${{ matrix.arch }}.tar
+        run: sudo podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Run the image and verify GCC is available inside the container
-        run: podman unshare ./test-ci.sh
+        run: sudo ./test-ci.sh
   
   publish:
     name: Publish
