@@ -65,7 +65,7 @@ jobs:
         run: podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Run the image and verify GCC is available inside the container
-        run: ./test-ci.sh
+        run: podman unshare ./test-ci.sh
   
   publish:
     name: Publish
