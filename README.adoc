@@ -35,7 +35,7 @@ Or just open a shell inside the container.
 
 [source,sh]
 ----
-➜ podman run --rm -it --volume "$HOME":/home/user:Z --name gcc quay.io/jwillikers/gcc
+➜ podman run --rm -it --volume "$HOME":/home/user:Z --name gcc quay.io/jwillikers/gcc:latest
 ----
 
 == Build
