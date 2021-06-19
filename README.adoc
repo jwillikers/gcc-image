@@ -16,7 +16,6 @@ endif::[]
 :Podman: https://podman.io/[Podman]
 
 image:https://img.shields.io/github/workflow/status/jwillikers/gcc-image/CI/main[GitHub Workflow Status]
-image:https://quay.io/repository/jwillikers/gcc/status["Docker Repository on Quay", link="https://quay.io/repository/jwillikers/gcc"]
 
 A container image for running the {GCC} toolchain for C and {cpp}, built on {Fedora}.
 Comes complete with CMake, Conan, Ninja, and Clang tools.
