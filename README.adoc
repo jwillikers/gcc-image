@@ -35,7 +35,7 @@ Or just open a shell inside the container.
 
 [source,sh]
 ----
-➜ podman run --userns keep-id --rm -it --volume "$HOME":/home/user:Z --name gcc quay.io/jwillikers/gcc:latest
+➜ podman run --userns keep-id --rm -it --volume "$PWD":/home/user:Z --name gcc quay.io/jwillikers/gcc:latest
 ----
 
 == Build
