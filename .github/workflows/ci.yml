@@ -64,10 +64,13 @@ jobs:
       - name: Load the image
         run: podman image load -i gcc-${{ matrix.arch }}.tar
 
+      - name: Compile the test file
+        run:  podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+
       - name: Run the image and verify GCC is available inside the container
         run: |
           # podman unshare chown $(id -u "$USER"):$(id -g "$USER") ${{ github.workspace }}
-          podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+          ls -l a.out
           podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
   
   publish:
