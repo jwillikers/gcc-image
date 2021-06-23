@@ -12,6 +12,7 @@
         "openfortivpn",
         "sh",
         "toolchain",
+        "userns",
         "workdir"
     ]
 }
