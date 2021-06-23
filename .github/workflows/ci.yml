@@ -65,10 +65,10 @@ jobs:
         run: sudo podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Compile the test file
-        run: sudo podman run --privileged --device /dev/fuse --security-opt label=disabled --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+        run: sudo podman run --rm --volume ${{ github.workspace }}:/home/user --name test-container -t localhost/gcc g++ test/main.cpp
 
       - name: Run the image and verify GCC is available inside the container
-        run: sudo podman run --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
+        run: sudo podman run --rm --volume ${{ github.workspace }}:/home/user --name test-container -t localhost/gcc ./a.out
 
   publish:
     name: Publish
