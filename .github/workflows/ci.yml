@@ -22,9 +22,14 @@ jobs:
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-      
+
       - name: Check out the repository
         uses: actions/checkout@v2
+
+      - name: configure GitHub to run rootless containers
+        uses: |
+          mkdir -p ~/.config/containers
+          cp storage.conf ~/.config/containers/storage.conf
 
       - name: Build the image with Buildah
         run: ./gcc-image.sh -a ${{ matrix.arch }}
@@ -56,7 +61,12 @@ jobs:
 
       - name: Check out the repository
         uses: actions/checkout@v2
-        
+
+      - name: configure GitHub to run rootless containers
+        uses: |
+          mkdir -p ~/.config/containers
+          cp storage.conf ~/.config/containers/storage.conf
+
       - uses: actions/download-artifact@v2
         with:
           name: gcc-${{ matrix.arch }}
@@ -65,20 +75,28 @@ jobs:
         run: podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Compile the test file
-        run:  podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+        run: podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
 
       - name: Run the image and verify GCC is available inside the container
         run: |
           # podman unshare chown $(id -u "$USER"):$(id -g "$USER") ${{ github.workspace }}
           ls -l a.out
           podman run --security-opt label=disabled --userns keep-id --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
-  
+
   publish:
     name: Publish
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: configure GitHub to run rootless containers
+        uses: |
+          mkdir -p ~/.config/containers
+          cp storage.conf ~/.config/containers/storage.conf
+
       - name: Create a manifest
         run: buildah manifest create gcc-multiarch:latest
 
@@ -89,7 +107,7 @@ jobs:
 
       - name: Load the arm64 image
         run: podman image load -i gcc-arm.tar
-              
+
       - name: Add the arm image to the manifest
         run: buildah manifest add gcc-multiarch:latest localhost/gcc
 
@@ -100,7 +118,7 @@ jobs:
 
       - name: Load the arm64 image
         run: podman image load -i gcc-arm64.tar
-              
+
       - name: Add the arm64 image to the manifest
         run: buildah manifest add gcc-multiarch:latest localhost/gcc
 
