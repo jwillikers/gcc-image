@@ -26,11 +26,6 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: configure GitHub to run rootless containers
-        run: |
-          mkdir -p ~/.config/containers
-          cp storage.conf ~/.config/containers/storage.conf
-
       - name: Build the image with Buildah
         run: ./gcc-image.sh -a ${{ matrix.arch }}
 
@@ -62,32 +57,18 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: configure GitHub to run rootless containers
-        run: |
-          mkdir -p ~/.config/containers
-          cp storage.conf ~/.config/containers/storage.conf
-
       - uses: actions/download-artifact@v2
         with:
           name: gcc-${{ matrix.arch }}
 
       - name: Load the image
-        run: podman image load -i gcc-${{ matrix.arch }}.tar
-
-      - name: Unshare the workspace directory
-        run: |
-          ls -ld ${{ github.workspace }}
-          podman unshare chown $(id -u "$USER"):$(id -g "$USER") -R ${{ github.workspace }}
+        run: sudo podman image load -i gcc-${{ matrix.arch }}.tar
 
       - name: Compile the test file
-        run: |
-          ls -ld ${{ github.workspace }}
-          podman run --privileged --device /dev/fuse --security-opt label=disabled --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+        run: sudo podman run --privileged --device /dev/fuse --security-opt label=disabled --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
 
       - name: Run the image and verify GCC is available inside the container
-        run: |
-          ls -l a.out
-          podman run --privileged --device /dev/fuse --security-opt label=disabled --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
+        run: sudo podman run --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
 
   publish:
     name: Publish
@@ -97,11 +78,6 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
-
-      - name: configure GitHub to run rootless containers
-        run: |
-          mkdir -p ~/.config/containers
-          cp storage.conf ~/.config/containers/storage.conf
 
       - name: Create a manifest
         run: buildah manifest create gcc-multiarch:latest
