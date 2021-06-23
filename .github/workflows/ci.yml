@@ -68,8 +68,8 @@ jobs:
         run: |
           # podman unshare chown $(id -u "$USER"):$(id -g "$USER") ${{ github.workspace }}
           mkdir ${{ github.workspace }}/mycontainers
-          podman run --ulimit host --volume ${{ github.workspace }}/mycontainers:/var/lib/containers:rw --device /dev/fuse --userns keep-id --privileged --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ ${{ github.workspace }}/test/main.cpp
-          podman run --ulimit host --volume ${{ github.workspace }}/mycontainers:/var/lib/containers:rw --device /dev/fuse --userns keep-id --privileged --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ${{ github.workspace }}/a.out
+          podman run --ulimit host --volume ${{ github.workspace }}/mycontainers:/var/lib/containers:rw --device /dev/fuse --userns keep-id --privileged --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc g++ test/main.cpp
+          podman run --ulimit host --volume ${{ github.workspace }}/mycontainers:/var/lib/containers:rw --device /dev/fuse --userns keep-id --privileged --rm --volume ${{ github.workspace }}:/home/user:Z --name test-container -t localhost/gcc ./a.out
   
   publish:
     name: Publish
