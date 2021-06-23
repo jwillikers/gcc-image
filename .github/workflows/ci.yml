@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: configure GitHub to run rootless containers
-        uses: |
+        run: |
           mkdir -p ~/.config/containers
           cp storage.conf ~/.config/containers/storage.conf
 
@@ -63,7 +63,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: configure GitHub to run rootless containers
-        uses: |
+        run: |
           mkdir -p ~/.config/containers
           cp storage.conf ~/.config/containers/storage.conf
 
@@ -93,7 +93,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: configure GitHub to run rootless containers
-        uses: |
+        run: |
           mkdir -p ~/.config/containers
           cp storage.conf ~/.config/containers/storage.conf
 
