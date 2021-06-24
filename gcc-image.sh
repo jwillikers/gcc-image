@@ -62,6 +62,8 @@ buildah config --user user "$CONTAINER"
 
 buildah config --workingdir /home/user "$CONTAINER"
 
+buildah config --env _CONTAINERS_USERNS_CONFIGURED="" "$CONTAINER"
+
 buildah config --label "io.containers.autoupdate=registry" "$CONTAINER"
 
 buildah config --author "jordan@jwillikers.com" "$CONTAINER"
